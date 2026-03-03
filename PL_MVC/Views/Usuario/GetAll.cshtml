@@ -1,0 +1,64 @@
+﻿@model ML.Usuario
+
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@Html.ActionLink("Agregar", "Form", "Usuario", new {@class="btn btn-success"})
+
+
+
+@if (Model.Usuarios.Count > 0)
+{
+    //impirmir una tabla
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr class="text-center">
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (ML.Usuario usuario in Model.Usuarios)
+                        {
+                            <tr class="text-center">
+                                <td>@usuario.Nombre @usuario.ApellidoPaterno @usuario.ApellidoMaterno</td>
+                                <td>@usuario.ApellidoPaterno</td>
+                                <td>@usuario.Rol.Nombre</td>
+
+                                <td>
+                                    <button class="btn btn-warning">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    
+                                    <button class="btn btn-danger">
+                                        <i class="bi bi-person-x-fill"></i>
+                                    </button>
+                                </td>   
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+
+<div class="alert alert-danger" role="alert">
+    <p>Hay un error @ViewBag.ErrorMessage </p>
+
+</div>
+}
