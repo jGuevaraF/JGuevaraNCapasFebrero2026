@@ -120,7 +120,8 @@ namespace BL
                 {
                     SqlCommand cmd = new SqlCommand();
                     cmd.Connection = context;
-                    cmd.CommandText = "SELECT * FROM Roles";
+                    cmd.CommandText = "RolGetAll";
+                    cmd.CommandType = CommandType.StoredProcedure;
 
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();

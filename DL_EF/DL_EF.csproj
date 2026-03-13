@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D4DD1688-58D8-410C-862D-6066E600096C}</ProjectGuid>
+    <ProjectGuid>{E0CE2713-4B3F-4B52-AFF2-B8E6BE61B5AB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BL</RootNamespace>
-    <AssemblyName>BL</AssemblyName>
+    <RootNamespace>DL_EF</RootNamespace>
+    <AssemblyName>DL_EF</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -43,6 +43,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,30 +54,86 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="Colonia.cs" />
-    <Compile Include="Estado.cs" />
-    <Compile Include="Municipio.cs" />
+    <Compile Include="Colonia.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ColoniaGetByIdMunicipio_Result.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Direccion.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Estado.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EstadoGetAll_Result.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JGuevaraProgramacionNCapasFebrero2026.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JGuevaraProgramacionNCapasFebrero2026.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JGuevaraProgramacionNCapasFebrero2026.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Municipio.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MunicipioGetByIdEstado_Result.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rol.cs" />
-    <Compile Include="Usuario.cs" />
+    <Compile Include="Rol.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RolGetAll_Result.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Usuario.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UsuarioGetAll_Result.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UsuarioGetById_Result.cs">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DL\DL.csproj">
-      <Project>{2ed8c1f9-1285-4dd0-8e61-fa8b82d4c9eb}</Project>
-      <Name>DL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DL_EF\DL_EF.csproj">
-      <Project>{e0ce2713-4b3f-4b52-aff2-b8e6be61b5ab}</Project>
-      <Name>DL_EF</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ML\ML.csproj">
-      <Project>{706b802e-daba-4aa0-ba63-c7276252f620}</Project>
-      <Name>ML</Name>
-    </ProjectReference>
+    <EntityDeploy Include="JGuevaraProgramacionNCapasFebrero2026.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>JGuevaraProgramacionNCapasFebrero2026.Designer.cs</LastGenOutput>
+    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.Config" />
+    <None Include="JGuevaraProgramacionNCapasFebrero2026.edmx.diagram">
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="JGuevaraProgramacionNCapasFebrero2026.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.edmx</DependentUpon>
+      <LastGenOutput>JGuevaraProgramacionNCapasFebrero2026.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="JGuevaraProgramacionNCapasFebrero2026.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>JGuevaraProgramacionNCapasFebrero2026.edmx</DependentUpon>
+      <LastGenOutput>JGuevaraProgramacionNCapasFebrero2026.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

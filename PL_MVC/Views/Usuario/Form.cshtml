@@ -1,4 +1,5 @@
-﻿
+﻿@model ML.Usuario
+
 @{
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,3 +7,237 @@
 
 <h2>Form</h2>
 
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            @using (Html.BeginForm("Form", "Usuario", FormMethod.Post, new { @class = "container" , @enctype="multipart/form-data" }))
+            {
+                @Html.HiddenFor(model => model.IdUsuario)
+
+                <div class="row">
+                    <div class="col-4">
+                        @Html.LabelFor(model => model.Nombre)
+                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                        @*<input id="Nombre" name="Nombre" type="text" value="">*@
+                    </div>
+                    <div class="col-4">
+                        @Html.LabelFor(model => model.ApellidoPaterno)
+                        @Html.TextBoxFor(model => model.ApellidoPaterno)
+
+                        @Html.LabelFor(model => model.ApellidoMaterno)
+                        @Html.TextBoxFor(model => model.ApellidoMaterno)
+                    </div>
+                    <div class="col-4">
+                        @Html.LabelFor(model => model.FechaNacimiento)
+                        @Html.TextBoxFor(model => model.FechaNacimiento)
+                    </div>
+
+                </div>
+
+                @Html.DropDownListFor(model => model.Rol.IdRol, new SelectList(Model.Rol.Roles, "IdRol", "Nombre"), "Selecciona un Rol", new { @class = "form-control" })
+
+                @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.Estado.IdEstado, new SelectList(Model.Direccion.Colonia.Municipio.Estado.Estados, "IdEstado", "Nombre"), "Selecciona un Estado", new { @onchange = "MunicipioGetByIdEstado(this)" })
+
+                if (Model.Direccion.Colonia.Municipio.Municipios.Count > 0)
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.IdMunicipio, new SelectList(Model.Direccion.Colonia.Municipio.Municipios, "IdMunicipio", "Nombre"), "Seleccione un municipio", new { @id = "ddlMunicipio", @onchange = "ColoniaGetByIdMunicipio(this)" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.IdMunicipio, new SelectList(String.Empty), "Seleccione un municipio", new { @id = "ddlMunicipio", @onchange = "ColoniaGetByIdMunicipio(this)" })
+                }
+
+
+                if (Model.Direccion.Colonia.Colonias.Count > 0)
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.IdColonia, new SelectList(Model.Direccion.Colonia.Colonias, "IdColonia", "Nombre"), "Seleccione un Colonia", new { @id = "ddlColonia", @onchange = "CodigoPostalGetByIdColonia(this)" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.IdColonia, new SelectList(String.Empty), "Seleccione un Colonia", new { @id = "ddlColonia", @onchange = "CodigoPostalGetByIdColonia(this)" })
+
+                }
+
+
+                @Html.TextBoxFor(model => model.Direccion.Colonia.CodigoPostal, new { @readonly = true, @id = "inptCodigoPostal" })
+
+
+                <input type="file" onchange="ValidarImagen(this)" id="inptUsuarioImagen" name="UsuarioImagen" />
+                <img id="imgUsuario" />
+
+
+
+                <button type="submit" class="btn btn-outline-success">Enviar</button>
+
+            }
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.7.0.js"></script>
+
+<script>
+
+    function MunicipioGetByIdEstado(select) {
+
+        var idEstado = select.value;
+
+        if (idEstado == "") {
+            $('#ddlMunicipio').empty();
+
+            $('#ddlMunicipio').append('<option>Selecciona un Municipio</option>')
+
+            $('#ddlColonia').empty();
+
+            $('#ddlColonia').append('<option>Selecciona un Colonia</option>')
+
+        } else {
+             var urlBase = '@Url.Action("MunicipioGetByIdEstado", "Usuario")';
+
+             $.ajax({
+                 "url": urlBase + '?idEstado=' + idEstado,
+                 "dataType": 'JSON',
+                 "type": 'GET',
+                 //"data":'informacion pesada'
+
+                 "success": function (result) {
+
+                     if (result.Correct) {
+                         //crear etiquetas <option> con JQUERY
+
+                         $('#ddlMunicipio').empty();
+
+                         $('#ddlMunicipio').append('<option>Selecciona un Municipio</option>')
+
+                         $('#ddlColonia').empty();
+
+                         $('#ddlColonia').append('<option>Selecciona un Colonia</option>')
+
+                         $.each(result.Objects, function (indice, valor) {
+
+                             let etiqueta = "<option value='" + valor.IdMunicipio + "'>" + valor.Nombre + "</option>";
+
+                             $('#ddlMunicipio').append(etiqueta)
+
+                         });
+
+                     } else {
+                         alert ('Todo mal')
+                     }
+
+                 },
+                 "error": function () {
+                     alert('ERROR CON AJAX')
+                 }
+             })
+        }
+
+
+
+    }
+
+    function ColoniaGetByIdMunicipio(select) {
+        var idMunicipio = select.value;
+
+        if (idMunicipio == "") {
+             $('#ddlColonia').empty();
+
+             $('#ddlColonia').append('<option>Selecciona un Colonia</option>')
+
+         } else {
+              var urlBase = '@Url.Action("ColoniaGetByIdMunicipio", "Usuario")';
+
+            $.ajax({
+                  "url": urlBase + '?idMunicipio=' + idMunicipio,
+                  "dataType": 'JSON',
+                  "type": 'GET',
+                  //"data":'informacion pesada'
+
+                  "success": function (result) {
+
+                      if (result.Correct) {
+                          //crear etiquetas <option> con JQUERY
+
+                          $('#ddlColonia').empty();
+
+                          $('#ddlColonia').append('<option>Selecciona un Colonia</option>')
+
+                          $.each(result.Objects, function (indice, valor) {
+
+                              let etiqueta = "<option value='" + valor.IdColonia + "'>" + valor.Nombre + "</option>";
+
+                              $('#ddlColonia').append(etiqueta)
+
+                          });
+
+                      } else {
+                          alert ('Todo mal')
+                      }
+
+                  },
+                  "error": function () {
+                      alert('ERROR CON AJAX')
+                  }
+              })
+         }
+    }
+
+
+    function CodigoPostalGetByIdColonia(select) {
+        var idColonia = select.value;
+        //var idCOlonia = $(select).val();
+
+        if (idColonia != "") {
+
+            var ruta = '@Url.Action("GetCodigoPostalByIdColonia", "Usuario")';
+
+            $.ajax({
+                "url": ruta + "?idColonia=" + idColonia,
+                "dataType": 'JSON',
+                "type": 'GET',
+                "success": function (result) {
+                    if (result.Correct) {
+                        $('#inptCodigoPostal').empty();
+                        $('#inptCodigoPostal').val(result.Object)
+                    }
+                } ,
+                "error": function () { }
+            })
+
+        }
+    }
+
+    function ValidarImagen(input) {
+        let nombre = input.files[0].name;
+
+        let extension = nombre.split('.');
+
+        //jpg, png, jpeg,
+
+        if (extension[1] == 'jpg' || extension[1] == 'png' || extension[1] == 'jpeg') {
+            //previsualizarla
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                $("#imgUsuario").attr("src", reader.result);
+            }
+            reader.readAsDataURL(file);
+
+
+        } else {
+            alert("NO es una imagen, revisalo");
+            $('#inptUsuarioImagen').val('');
+            $("#imgUsuario").attr("src", '');
+
+        }
+
+    }
+
+
+</script>

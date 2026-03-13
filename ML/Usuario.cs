@@ -19,6 +19,8 @@ namespace ML
 
         public ML.Rol Rol { get; set; } //FK
 
+        public ML.Direccion Direccion { get; set; }
+
 
         public List<object> Usuarios { get; set; } //guardar usuarios de la BD
     }

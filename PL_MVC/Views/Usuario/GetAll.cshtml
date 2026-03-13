@@ -7,7 +7,7 @@
 
 
 
-@Html.ActionLink("Agregar", "Form", "Usuario", new {@class="btn btn-success"})
+@Html.ActionLink("Agregar", "Form", "Usuario", new { @class = "btn btn-success", @id = "Boton" })
 
 
 
@@ -24,6 +24,7 @@
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Rol</th>
+                            <th>Direccion</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -37,14 +38,18 @@
                                 <td>@usuario.Rol.Nombre</td>
 
                                 <td>
-                                    <button class="btn btn-warning">
+                                    @usuario.Direccion.Calle , #@usuario.Direccion.NumeroExterior , @usuario.Direccion.NumeroInterior 
+                                </td>
+
+                                <td>
+                                    <a href="@Url.Action("Form", "Usuario", new {idUsuario = usuario.IdUsuario})" class="btn btn-warning">
                                         <i class="bi bi-pencil-square"></i>
-                                    </button>
-                                    
-                                    <button class="btn btn-danger">
+                                    </a>
+
+                                    <a href="@Url.Action("Delete", "Usuario", new {IdUsuario = usuario.IdUsuario})" onclick="return confirm('Estas seguro de eliminarlo?')" class="btn btn-danger">
                                         <i class="bi bi-person-x-fill"></i>
-                                    </button>
-                                </td>   
+                                    </a>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -57,8 +62,31 @@
 else
 {
 
-<div class="alert alert-danger" role="alert">
-    <p>Hay un error @ViewBag.ErrorMessage </p>
+    <div class="alert alert-danger" role="alert">
+        <p>Hay un error @ViewBag.ErrorMessage </p>
 
-</div>
+    </div>
 }
+
+
+@*<script src="~/Scripts/jquery-3.7.0.js"></script>*@
+
+@Scripts.Render("~/bundles/jquery")
+
+<script>
+
+    //Lenguaje de programacion NO TIPADO
+    //INT, STRING, LONG, LIST, CHAR
+
+    //Nivel de Contexto
+    //Donde viven las variables
+
+    //let o var
+
+    console.log(document.getElementById('Boton'))
+    document.getElementById('Boton')
+    $('#Boton')
+
+
+</script>
+
