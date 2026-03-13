@@ -56,6 +56,7 @@
           <Property Name="ApellidoPaterno" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="ApellidoMaterno" Type="varchar" MaxLength="50" />
           <Property Name="IdRol" Type="int" />
+          <Property Name="Imagen" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK__Colonia__IdMunic__3B75D760">
           <End Role="Municipio" Type="Self.Municipio" Multiplicity="0..1" />
@@ -129,7 +130,12 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="ApellidoPaterno" Type="varchar" Mode="In" />
           <Parameter Name="ApellidoMaterno" Type="varchar" Mode="In" />
+          <Parameter Name="Imagen" Type="varbinary(max)" Mode="In" />
           <Parameter Name="IdRol" Type="int" Mode="In" />
+          <Parameter Name="Calle" Type="varchar" Mode="In" />
+          <Parameter Name="NUmeroInterior" Type="varchar" Mode="In" />
+          <Parameter Name="NUmeroExterior" Type="varchar" Mode="In" />
+          <Parameter Name="IdColonia" Type="int" Mode="In" />
         </Function>
         <Function Name="UsuarioGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="UsuarioGetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -185,12 +191,6 @@
         <EntityContainer Name="JGuevaraProgramacioNCapasFebrero2026Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Rols" EntityType="Self.Rol" />
           <FunctionImport Name="RolGetAll" ReturnType="Collection(JGuevaraProgramacioNCapasFebrero2026Model.RolGetAll_Result)" />
-          <FunctionImport Name="UsuarioAdd">
-            <Parameter Name="Nombre" Mode="In" Type="String" />
-            <Parameter Name="ApellidoPaterno" Mode="In" Type="String" />
-            <Parameter Name="ApellidoMaterno" Mode="In" Type="String" />
-            <Parameter Name="IdRol" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="UsuarioUpdate">
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
             <Parameter Name="Nombre" Mode="In" Type="String" />
@@ -234,6 +234,17 @@
             <End Role="Rol" EntitySet="Rols" />
             <End Role="Usuario" EntitySet="Usuarios" />
           </AssociationSet>
+          <FunctionImport Name="UsuarioAdd">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="ApellidoPaterno" Mode="In" Type="String" />
+            <Parameter Name="ApellidoMaterno" Mode="In" Type="String" />
+            <Parameter Name="Imagen" Mode="In" Type="Binary" />
+            <Parameter Name="IdRol" Mode="In" Type="Int32" />
+            <Parameter Name="Calle" Mode="In" Type="String" />
+            <Parameter Name="NUmeroInterior" Mode="In" Type="String" />
+            <Parameter Name="NUmeroExterior" Mode="In" Type="String" />
+            <Parameter Name="IdColonia" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="RolGetAll_Result">
           <Property Type="Int32" Name="IdRol" Nullable="false" />
@@ -362,6 +373,7 @@
           <Property Name="IdRol" Type="Int32" />
           <NavigationProperty Name="Direccions" Relationship="JGuevaraProgramacioNCapasFebrero2026Model.FK__Direccion__IdUsu__3F466844" FromRole="Usuario" ToRole="Direccion" />
           <NavigationProperty Name="Rol" Relationship="JGuevaraProgramacioNCapasFebrero2026Model.FK__Usuario__IdRol__145C0A3F" FromRole="Usuario" ToRole="Rol" />
+          <Property Name="Imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK__Direccion__IdUsu__3F466844">
           <End Type="JGuevaraProgramacioNCapasFebrero2026Model.Usuario" Role="Usuario" Multiplicity="0..1" />
@@ -409,7 +421,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="UsuarioAdd" FunctionName="JGuevaraProgramacioNCapasFebrero2026Model.Store.UsuarioAdd" />
           <FunctionImportMapping FunctionImportName="UsuarioUpdate" FunctionName="JGuevaraProgramacioNCapasFebrero2026Model.Store.UsuarioUpdate" />
           <FunctionImportMapping FunctionImportName="UsuarioGetAll" FunctionName="JGuevaraProgramacioNCapasFebrero2026Model.Store.UsuarioGetAll">
             <ResultMapping>
@@ -507,6 +518,7 @@
           <EntitySetMapping Name="Usuarios">
             <EntityTypeMapping TypeName="JGuevaraProgramacioNCapasFebrero2026Model.Usuario">
               <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Imagen" ColumnName="Imagen" />
                 <ScalarProperty Name="IdRol" ColumnName="IdRol" />
                 <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
                 <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
@@ -515,6 +527,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="UsuarioAdd" FunctionName="JGuevaraProgramacioNCapasFebrero2026Model.Store.UsuarioAdd" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

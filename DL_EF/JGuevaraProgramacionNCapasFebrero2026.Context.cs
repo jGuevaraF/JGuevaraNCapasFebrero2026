@@ -39,27 +39,6 @@ namespace DL_EF
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RolGetAll_Result>("RolGetAll");
         }
     
-        public virtual int UsuarioAdd(string nombre, string apellidoPaterno, string apellidoMaterno, Nullable<int> idRol)
-        {
-            var nombreParameter = nombre != null ?
-                new ObjectParameter("Nombre", nombre) :
-                new ObjectParameter("Nombre", typeof(string));
-    
-            var apellidoPaternoParameter = apellidoPaterno != null ?
-                new ObjectParameter("ApellidoPaterno", apellidoPaterno) :
-                new ObjectParameter("ApellidoPaterno", typeof(string));
-    
-            var apellidoMaternoParameter = apellidoMaterno != null ?
-                new ObjectParameter("ApellidoMaterno", apellidoMaterno) :
-                new ObjectParameter("ApellidoMaterno", typeof(string));
-    
-            var idRolParameter = idRol.HasValue ?
-                new ObjectParameter("IdRol", idRol) :
-                new ObjectParameter("IdRol", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UsuarioAdd", nombreParameter, apellidoPaternoParameter, apellidoMaternoParameter, idRolParameter);
-        }
-    
         public virtual int UsuarioUpdate(Nullable<int> idUsuario, string nombre, string apellidoPaterno, string apellidoMaterno, Nullable<int> idRol)
         {
             var idUsuarioParameter = idUsuario.HasValue ?
@@ -120,6 +99,47 @@ namespace DL_EF
                 new ObjectParameter("IdUsuario", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UsuarioGetById_Result>("UsuarioGetById", idUsuarioParameter);
+        }
+    
+        public virtual int UsuarioAdd(string nombre, string apellidoPaterno, string apellidoMaterno, byte[] imagen, Nullable<int> idRol, string calle, string nUmeroInterior, string nUmeroExterior, Nullable<int> idColonia)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var apellidoPaternoParameter = apellidoPaterno != null ?
+                new ObjectParameter("ApellidoPaterno", apellidoPaterno) :
+                new ObjectParameter("ApellidoPaterno", typeof(string));
+    
+            var apellidoMaternoParameter = apellidoMaterno != null ?
+                new ObjectParameter("ApellidoMaterno", apellidoMaterno) :
+                new ObjectParameter("ApellidoMaterno", typeof(string));
+    
+            var imagenParameter = imagen != null ?
+                new ObjectParameter("Imagen", imagen) :
+                new ObjectParameter("Imagen", typeof(byte[]));
+    
+            var idRolParameter = idRol.HasValue ?
+                new ObjectParameter("IdRol", idRol) :
+                new ObjectParameter("IdRol", typeof(int));
+    
+            var calleParameter = calle != null ?
+                new ObjectParameter("Calle", calle) :
+                new ObjectParameter("Calle", typeof(string));
+    
+            var nUmeroInteriorParameter = nUmeroInterior != null ?
+                new ObjectParameter("NUmeroInterior", nUmeroInterior) :
+                new ObjectParameter("NUmeroInterior", typeof(string));
+    
+            var nUmeroExteriorParameter = nUmeroExterior != null ?
+                new ObjectParameter("NUmeroExterior", nUmeroExterior) :
+                new ObjectParameter("NUmeroExterior", typeof(string));
+    
+            var idColoniaParameter = idColonia.HasValue ?
+                new ObjectParameter("IdColonia", idColonia) :
+                new ObjectParameter("IdColonia", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UsuarioAdd", nombreParameter, apellidoPaternoParameter, apellidoMaternoParameter, imagenParameter, idRolParameter, calleParameter, nUmeroInteriorParameter, nUmeroExteriorParameter, idColoniaParameter);
         }
     }
 }

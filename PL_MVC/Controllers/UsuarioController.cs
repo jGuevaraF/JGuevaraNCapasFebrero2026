@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -125,14 +126,37 @@ namespace PL_MVC.Controllers
         [HttpPost]
         public ActionResult Form(ML.Usuario usuario, HttpPostedFileBase UsuarioImagen)
         {
-            
+            //HttpPostedFileBase imagen = Request.Files["UsuarioImagen"];
+
+            if (UsuarioImagen != null)
+            {
+                //convertir httpPostedFileBase => byte[]
+                // Source - https://stackoverflow.com/a/7852256
+                // Posted by Jon Skeet
+                // Retrieved 2026-03-13, License - CC BY-SA 3.0
+
+                byte[] data;
+                using (Stream inputStream = UsuarioImagen.InputStream)
+                {
+                    MemoryStream memoryStream = inputStream as MemoryStream;
+                    if (memoryStream == null)
+                    {
+                        memoryStream = new MemoryStream();
+                        inputStream.CopyTo(memoryStream);
+                    }
+
+                    usuario.Imagen = memoryStream.ToArray();
+                }
+
+            }
+
             if (usuario.IdUsuario == 0)
             {
                 //add
 
-                //ML.Result result = BL.Usuario.Add(usuario);  
-                ML.Result result = new ML.Result();
-                result.Correct = true;
+                ML.Result result = BL.Usuario.Add(usuario);
+                //ML.Result result = new ML.Result();
+                //result.Correct = true;
 
                 if (result.Correct)
                 {

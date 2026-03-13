@@ -25,6 +25,7 @@ namespace DL_EF
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
         public Nullable<int> IdRol { get; set; }
+        public byte[] Imagen { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Direccion> Direccions { get; set; }

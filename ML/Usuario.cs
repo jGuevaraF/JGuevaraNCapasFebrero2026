@@ -15,6 +15,7 @@ namespace ML
 
         public string FechaNacimiento { get; set; }
 
+        public byte[] Imagen { get; set; }
         //propiedades de navegacion
 
         public ML.Rol Rol { get; set; } //FK

@@ -332,7 +332,7 @@ namespace BL
             return result;
         }
 
-        public static ML.Result Add(ML.Usuario usuario)
+        public static ML.Result AddLINQ(ML.Usuario usuario)
         {
             ML.Result result = new ML.Result();
             try
@@ -450,5 +450,28 @@ namespace BL
             return result;
         }
 
+
+        public static ML.Result Add(ML.Usuario usuario)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities context = new DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities())
+                {
+                    var query = context.UsuarioAdd(usuario.Nombre, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Imagen, usuario.Rol.IdRol, usuario.Direccion.Calle, usuario.Direccion.NumeroInterior, usuario.Direccion.NumeroExterior, usuario.Direccion.Colonia.IdColonia);
+
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
     }
 }
