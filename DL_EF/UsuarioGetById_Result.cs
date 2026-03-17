@@ -17,6 +17,7 @@ namespace DL_EF
         public string Nombre { get; set; }
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
+        public byte[] Imagen { get; set; }
         public Nullable<int> IdRol { get; set; }
         public string Calle { get; set; }
         public string NumeroInterior { get; set; }

@@ -281,6 +281,7 @@ namespace BL
                         usuario.Nombre = query.Nombre;
                         usuario.ApellidoPaterno = query.ApellidoPaterno;
                         usuario.ApellidoMaterno = query.ApellidoMaterno;
+                        usuario.Imagen = query.Imagen;
 
                         usuario.Rol = new ML.Rol();
                         if (query.IdRol == null)
@@ -458,7 +459,19 @@ namespace BL
             {
                 using (DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities context = new DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities())
                 {
-                    var query = context.UsuarioAdd(usuario.Nombre, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Imagen, usuario.Rol.IdRol, usuario.Direccion.Calle, usuario.Direccion.NumeroInterior, usuario.Direccion.NumeroExterior, usuario.Direccion.Colonia.IdColonia);
+                    var query = context.UsuarioAdd(
+                        usuario.Nombre,
+                        usuario.ApellidoPaterno,
+                        usuario.ApellidoMaterno,
+                        usuario.Imagen,
+                        usuario.Rol.IdRol,
+                        usuario.Direccion.Calle,
+                        usuario.Direccion.NumeroInterior,
+                        usuario.Direccion.NumeroExterior,
+                        usuario.Direccion.Colonia.IdColonia
+                    );
+
+                    result.Correct = true;
 
 
                 }
@@ -471,6 +484,28 @@ namespace BL
                 result.Ex = ex;
             }
 
+            return result;
+        }
+
+        public static ML.Result UpdateEF(ML.Usuario usuario)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities context = new DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities())
+                {
+                    context.UsuarioUpdate(usuario.IdUsuario, usuario.Nombre, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Rol.IdRol, usuario.Imagen);
+                   
+
+                    result.Correct = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
             return result;
         }
     }

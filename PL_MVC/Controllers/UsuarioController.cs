@@ -45,18 +45,18 @@ namespace PL_MVC.Controllers
         {
             ML.Usuario usuario = new ML.Usuario();
             usuario.Rol = new ML.Rol();
+            usuario.Direccion = new ML.Direccion();
+            usuario.Direccion.Colonia = new ML.Colonia();
+            usuario.Direccion.Colonia.Municipio = new ML.Municipio();
+            usuario.Direccion.Colonia.Municipio.Estado = new ML.Estado();
+            usuario.Direccion.Colonia.Municipio.Municipios = new List<object>();
+            usuario.Direccion.Colonia.Colonias = new List<object>();
 
 
             if (idUsuario == null)
             {
                 //agregar 
-                usuario.Direccion = new ML.Direccion();
-                usuario.Direccion.Colonia = new ML.Colonia();
-                usuario.Direccion.Colonia.Municipio = new ML.Municipio();
-                usuario.Direccion.Colonia.Municipio.Estado = new ML.Estado();
 
-                usuario.Direccion.Colonia.Municipio.Municipios = new List<object>();
-                usuario.Direccion.Colonia.Colonias = new List<object>();
             }
             else
             {
@@ -168,11 +168,12 @@ namespace PL_MVC.Controllers
             else
             {
                 //update
-                //BL.Usuario.Update(usuario);
+                BL.Usuario.UpdateEF(usuario);
+                return RedirectToAction("GetAll");
             }
 
 
-            return View();
+            return View(usuario);
         }
 
         [HttpGet]
