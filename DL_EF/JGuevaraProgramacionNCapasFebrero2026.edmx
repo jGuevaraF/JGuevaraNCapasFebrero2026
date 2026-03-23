@@ -57,8 +57,26 @@
           <Property Name="ApellidoMaterno" Type="varchar" MaxLength="50" />
           <Property Name="IdRol" Type="int" />
           <Property Name="Imagen" Type="varbinary(max)" />
+          <Property Name="Estatus" Type="bit" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Colonia__IdMunic__30F848ED">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'JGuevaraProgramacioNCapasFebrero2026.dbo.UsuarioGetAllView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="UsuarioGetAllView">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+            <PropertyRef Name="UsuarioNombre" />
+            <PropertyRef Name="ApellidoPaterno" />
+            <PropertyRef Name="Estatus" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="UsuarioNombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="varchar" MaxLength="50" />
+          <Property Name="IdRol" Type="int" />
+          <Property Name="RolNombre" Type="varchar" MaxLength="30" />
+          <Property Name="Estatus" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Colonia__IdMunic__3B75D760">
           <End Role="Municipio" Type="Self.Municipio" Multiplicity="0..1" />
           <End Role="Colonia" Type="Self.Colonia" Multiplicity="*" />
           <ReferentialConstraint>
@@ -70,7 +88,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Direccion__IdCol__31EC6D26">
+        <Association Name="FK__Direccion__IdCol__3E52440B">
           <End Role="Colonia" Type="Self.Colonia" Multiplicity="0..1" />
           <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
           <ReferentialConstraint>
@@ -82,7 +100,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Direccion__IdUsu__32E0915F">
+        <Association Name="FK__Direccion__IdUsu__3F466844">
           <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
           <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
           <ReferentialConstraint>
@@ -94,7 +112,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Municipio__IdEst__33D4B598">
+        <Association Name="FK__Municipio__IdEst__38996AB5">
           <End Role="Estado" Type="Self.Estado" Multiplicity="0..1" />
           <End Role="Municipio" Type="Self.Municipio" Multiplicity="*" />
           <ReferentialConstraint>
@@ -106,7 +124,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Usuario__IdRol__34C8D9D1">
+        <Association Name="FK__Usuario__IdRol__145C0A3F">
           <End Role="Rol" Type="Self.Rol" Multiplicity="0..1" />
           <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
           <ReferentialConstraint>
@@ -137,7 +155,12 @@
           <Parameter Name="NUmeroExterior" Type="varchar" Mode="In" />
           <Parameter Name="IdColonia" Type="int" Mode="In" />
         </Function>
-        <Function Name="UsuarioGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="UsuarioGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="ApellidoPaterno" Type="varchar" Mode="In" />
+          <Parameter Name="ApellidoMaterno" Type="varchar" Mode="In" />
+          <Parameter Name="IdRol" Type="int" Mode="In" />
+        </Function>
         <Function Name="UsuarioGetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
         </Function>
@@ -147,7 +170,6 @@
           <Parameter Name="ApellidoPaterno" Type="varchar" Mode="In" />
           <Parameter Name="ApellidoMaterno" Type="varchar" Mode="In" />
           <Parameter Name="IdRol" Type="int" Mode="In" />
-          <Parameter Name="Imagen" Type="varbinary(max)" Mode="In" />
         </Function>
         <EntityContainer Name="JGuevaraProgramacioNCapasFebrero2026ModelStoreContainer">
           <EntitySet Name="Colonia" EntityType="Self.Colonia" Schema="dbo" store:Type="Tables" />
@@ -156,23 +178,34 @@
           <EntitySet Name="Municipio" EntityType="Self.Municipio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Colonia__IdMunic__30F848ED" Association="Self.FK__Colonia__IdMunic__30F848ED">
+          <EntitySet Name="UsuarioGetAllView" EntityType="Self.UsuarioGetAllView" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [UsuarioGetAllView].[IdUsuario] AS [IdUsuario], 
+    [UsuarioGetAllView].[UsuarioNombre] AS [UsuarioNombre], 
+    [UsuarioGetAllView].[ApellidoPaterno] AS [ApellidoPaterno], 
+    [UsuarioGetAllView].[ApellidoMaterno] AS [ApellidoMaterno], 
+    [UsuarioGetAllView].[IdRol] AS [IdRol], 
+    [UsuarioGetAllView].[RolNombre] AS [RolNombre], 
+    [UsuarioGetAllView].[Estatus] AS [Estatus]
+    FROM [dbo].[UsuarioGetAllView] AS [UsuarioGetAllView]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Colonia__IdMunic__3B75D760" Association="Self.FK__Colonia__IdMunic__3B75D760">
             <End Role="Municipio" EntitySet="Municipio" />
             <End Role="Colonia" EntitySet="Colonia" />
           </AssociationSet>
-          <AssociationSet Name="FK__Direccion__IdCol__31EC6D26" Association="Self.FK__Direccion__IdCol__31EC6D26">
+          <AssociationSet Name="FK__Direccion__IdCol__3E52440B" Association="Self.FK__Direccion__IdCol__3E52440B">
             <End Role="Colonia" EntitySet="Colonia" />
             <End Role="Direccion" EntitySet="Direccion" />
           </AssociationSet>
-          <AssociationSet Name="FK__Direccion__IdUsu__32E0915F" Association="Self.FK__Direccion__IdUsu__32E0915F">
+          <AssociationSet Name="FK__Direccion__IdUsu__3F466844" Association="Self.FK__Direccion__IdUsu__3F466844">
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Direccion" EntitySet="Direccion" />
           </AssociationSet>
-          <AssociationSet Name="FK__Municipio__IdEst__33D4B598" Association="Self.FK__Municipio__IdEst__33D4B598">
+          <AssociationSet Name="FK__Municipio__IdEst__38996AB5" Association="Self.FK__Municipio__IdEst__38996AB5">
             <End Role="Estado" EntitySet="Estado" />
             <End Role="Municipio" EntitySet="Municipio" />
           </AssociationSet>
-          <AssociationSet Name="FK__Usuario__IdRol__34C8D9D1" Association="Self.FK__Usuario__IdRol__34C8D9D1">
+          <AssociationSet Name="FK__Usuario__IdRol__145C0A3F" Association="Self.FK__Usuario__IdRol__145C0A3F">
             <End Role="Rol" EntitySet="Rol" />
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
@@ -192,7 +225,6 @@
         <EntityContainer Name="JGuevaraProgramacioNCapasFebrero2026Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Rols" EntityType="Self.Rol" />
           <FunctionImport Name="RolGetAll" ReturnType="Collection(JGuevaraProgramacioNCapasFebrero2026Model.RolGetAll_Result)" />
-          <FunctionImport Name="UsuarioGetAll" ReturnType="Collection(JGuevaraProgramacioNCapasFebrero2026Model.UsuarioGetAll_Result)" />
           <EntitySet Name="Colonias" EntityType="JGuevaraProgramacioNCapasFebrero2026Model.Colonia" />
           <EntitySet Name="Direccions" EntityType="JGuevaraProgramacioNCapasFebrero2026Model.Direccion" />
           <EntitySet Name="Estadoes" EntityType="JGuevaraProgramacioNCapasFebrero2026Model.Estado" />
@@ -242,23 +274,21 @@
             <Parameter Name="ApellidoPaterno" Mode="In" Type="String" />
             <Parameter Name="ApellidoMaterno" Mode="In" Type="String" />
             <Parameter Name="IdRol" Mode="In" Type="Int32" />
-            <Parameter Name="Imagen" Mode="In" Type="Binary" />
           </FunctionImport>
           <FunctionImport Name="UsuarioGetById" ReturnType="Collection(JGuevaraProgramacioNCapasFebrero2026Model.UsuarioGetById_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="UsuarioGetAllViews" EntityType="JGuevaraProgramacioNCapasFebrero2026Model.UsuarioGetAllView" />
+          <FunctionImport Name="UsuarioGetAll" ReturnType="Collection(JGuevaraProgramacioNCapasFebrero2026Model.UsuarioGetAll_Result)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="ApellidoPaterno" Mode="In" Type="String" />
+            <Parameter Name="ApellidoMaterno" Mode="In" Type="String" />
+            <Parameter Name="IdRol" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="RolGetAll_Result">
           <Property Type="Int32" Name="IdRol" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="30" />
-        </ComplexType>
-        <ComplexType Name="UsuarioGetAll_Result">
-          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
-          <Property Type="String" Name="UsuarioNombre" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="ApellidoPaterno" Nullable="false" MaxLength="200" />
-          <Property Type="String" Name="ApellidoMaterno" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="IdRol" Nullable="true" />
-          <Property Type="String" Name="RolNombre" Nullable="true" MaxLength="30" />
         </ComplexType>
         <EntityType Name="Colonia">
           <Key>
@@ -362,6 +392,7 @@
           <NavigationProperty Name="Direccions" Relationship="JGuevaraProgramacioNCapasFebrero2026Model.FK__Direccion__IdUsu__3F466844" FromRole="Usuario" ToRole="Direccion" />
           <NavigationProperty Name="Rol" Relationship="JGuevaraProgramacioNCapasFebrero2026Model.FK__Usuario__IdRol__145C0A3F" FromRole="Usuario" ToRole="Rol" />
           <Property Name="Imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Estatus" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK__Direccion__IdUsu__3F466844">
           <End Type="JGuevaraProgramacioNCapasFebrero2026Model.Usuario" Role="Usuario" Multiplicity="0..1" />
@@ -402,6 +433,30 @@
           <Property Type="Int32" Name="IdMunicipio" Nullable="false" />
           <Property Type="Int32" Name="IdEstado" Nullable="false" />
         </ComplexType>
+        <EntityType Name="UsuarioGetAllView">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+            <PropertyRef Name="UsuarioNombre" />
+            <PropertyRef Name="ApellidoPaterno" />
+            <PropertyRef Name="Estatus" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="UsuarioNombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApellidoPaterno" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ApellidoMaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdRol" Type="Int32" />
+          <Property Name="RolNombre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Estatus" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <ComplexType Name="UsuarioGetAll_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="UsuarioNombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ApellidoPaterno" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="ApellidoMaterno" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="IdRol" Nullable="true" />
+          <Property Type="String" Name="RolNombre" Nullable="true" MaxLength="30" />
+          <Property Type="Boolean" Name="Estatus" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -421,18 +476,6 @@
               <ComplexTypeMapping TypeName="JGuevaraProgramacioNCapasFebrero2026Model.RolGetAll_Result">
                 <ScalarProperty Name="IdRol" ColumnName="IdRol" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="UsuarioGetAll" FunctionName="JGuevaraProgramacioNCapasFebrero2026Model.Store.UsuarioGetAll">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="JGuevaraProgramacioNCapasFebrero2026Model.UsuarioGetAll_Result">
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="UsuarioNombre" ColumnName="UsuarioNombre" />
-                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
-                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
-                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
-                <ScalarProperty Name="RolNombre" ColumnName="RolNombre" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -502,6 +545,7 @@
           <EntitySetMapping Name="Usuarios">
             <EntityTypeMapping TypeName="JGuevaraProgramacioNCapasFebrero2026Model.Usuario">
               <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
                 <ScalarProperty Name="Imagen" ColumnName="Imagen" />
                 <ScalarProperty Name="IdRol" ColumnName="IdRol" />
                 <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
@@ -529,6 +573,32 @@
                 <ScalarProperty Name="CodigoPostal" ColumnName="CodigoPostal" />
                 <ScalarProperty Name="IdMunicipio" ColumnName="IdMunicipio" />
                 <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="UsuarioGetAllViews">
+            <EntityTypeMapping TypeName="JGuevaraProgramacioNCapasFebrero2026Model.UsuarioGetAllView">
+              <MappingFragment StoreEntitySet="UsuarioGetAllView">
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+                <ScalarProperty Name="RolNombre" ColumnName="RolNombre" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="UsuarioNombre" ColumnName="UsuarioNombre" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="UsuarioGetAll" FunctionName="JGuevaraProgramacioNCapasFebrero2026Model.Store.UsuarioGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JGuevaraProgramacioNCapasFebrero2026Model.UsuarioGetAll_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="UsuarioNombre" ColumnName="UsuarioNombre" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="RolNombre" ColumnName="RolNombre" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -17,9 +17,17 @@ namespace PL_MVC.Controllers
         [HttpGet] //Action Verb | Decoradores
         public ActionResult GetAll()
         {
-            ML.Result result = BL.Usuario.GetAll();
 
             ML.Usuario usuario = new ML.Usuario();
+            usuario.Nombre = "";
+            usuario.ApellidoPaterno = "";
+            usuario.ApellidoMaterno = "";
+            usuario.Rol = new ML.Rol();
+            usuario.Rol.IdRol = 0;
+
+
+            ML.Result result = BL.Usuario.GetAll(usuario);
+
 
             if (result.Correct)
             {
@@ -32,7 +40,39 @@ namespace PL_MVC.Controllers
 
             }
 
+            ML.Result resultRol = BL.Rol.GetAll();
+            usuario.Rol.Roles = resultRol.Objects;
 
+
+            return View(usuario);
+        }
+
+        [HttpPost]
+        public ActionResult GetAll(ML.Usuario usuario)
+        {
+            //if (usuario.Nombre == null)
+            //{
+            //    usuario.Nombre = "";
+            //}
+
+            usuario.Nombre = usuario.Nombre == null ? "" : usuario.Nombre;
+
+            //if(usuario.ApellidoPaterno == null)
+            //{
+            //    usuario.ApellidoPaterno = ""; ??
+            //}
+
+            usuario.ApellidoPaterno = usuario.ApellidoPaterno == null ? "" : usuario.ApellidoPaterno;
+
+            if(usuario.ApellidoMaterno == null)
+            {
+                usuario.ApellidoMaterno = "";
+            }
+            ML.Result result = BL.Usuario.GetAll(usuario);
+            usuario.Usuarios = result.Objects;
+
+            ML.Result resultRol = BL.Rol.GetAll();
+            usuario.Rol.Roles = resultRol.Objects;
 
             return View(usuario);
         }

@@ -6,6 +6,21 @@
 }
 
 
+@using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post))
+{
+    @Html.LabelFor(model => model.Nombre)
+    @Html.TextBoxFor(model => model.Nombre)
+
+    @Html.LabelFor(model => model.ApellidoPaterno)
+    @Html.TextBoxFor(model => model.ApellidoPaterno)
+
+    @Html.LabelFor(model => model.ApellidoMaterno)
+    @Html.TextBoxFor(model => model.ApellidoMaterno)
+
+    @Html.DropDownListFor(model => model.Rol.IdRol, new SelectList(Model.Rol.Roles, "IdRol", "Nombre"), "Selecciona un Rol")
+
+    <button type="submit">Buscar usuario</button>
+}
 
 @Html.ActionLink("Agregar", "Form", "Usuario", new { @class = "btn btn-success", @id = "Boton" })
 
@@ -21,10 +36,13 @@
                 <table class="table table-bordered table-hover">
                     <thead class="table-dark">
                         <tr class="text-center">
+
+                            <th>Estatus</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Rol</th>
                             <th>Direccion</th>
+                            <th>Imagen</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -32,13 +50,40 @@
                     <tbody>
                         @foreach (ML.Usuario usuario in Model.Usuarios)
                         {
+
+
                             <tr class="text-center">
+                                <td>
+                                    @if (usuario.Estatus)
+                                    {
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" checked onchange="ChangeEstatus(this, @usuario.IdUsuario)">
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckChecked">
+                                    }
+                                </td>
                                 <td>@usuario.Nombre @usuario.ApellidoPaterno @usuario.ApellidoMaterno</td>
                                 <td>@usuario.ApellidoPaterno</td>
                                 <td>@usuario.Rol.Nombre</td>
 
                                 <td>
-                                    @usuario.Direccion.Calle , #@usuario.Direccion.NumeroExterior , @usuario.Direccion.NumeroInterior 
+                                    @usuario.Direccion.Calle , #@usuario.Direccion.NumeroExterior , @usuario.Direccion.NumeroInterior
+                                </td>
+
+                                <td>
+                                    @if (usuario.Imagen.Count() > 0)
+                                    {
+                                        <img src="data:image/*;base64,@Convert.ToBase64String(usuario.Imagen)" />
+                                    }
+                                    else
+                                    {
+                                        @*<img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" />*@
+                                        <img id="imgUsuario" src="~/Content/Image/UserImage.png" width="200" height="200" />
+                                    }
                                 </td>
 
                                 <td>
@@ -73,7 +118,13 @@ else
 
 @Scripts.Render("~/bundles/jquery")
 
+
 <script>
+
+    function ChangeEstatus(input, idUsuario) {
+        console.log(input.checked)
+        console.log(idUsuario)
+    }
 
     //Lenguaje de programacion NO TIPADO
     //INT, STRING, LONG, LIST, CHAR
@@ -86,6 +137,10 @@ else
     console.log(document.getElementById('Boton'))
     document.getElementById('Boton')
     $('#Boton')
+
+    //ajax => get/post
+    //data o URL => APIS REST
+        //Estatus y IdUsuario
 
 
 </script>

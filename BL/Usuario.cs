@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -174,7 +175,7 @@ namespace BL
         }
 
 
-        public static ML.Result GetAll()
+        public static ML.Result GetAllSinParametros()
         {
             ML.Result result = new ML.Result();
 
@@ -494,10 +495,10 @@ namespace BL
             {
                 using (DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities context = new DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities())
                 {
-                    context.UsuarioUpdate(usuario.IdUsuario, usuario.Nombre, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Rol.IdRol, usuario.Imagen);
+                    //context.UsuarioUpdate(usuario.IdUsuario, usuario.Nombre, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Rol.IdRol, usuario.Imagen);
                    
 
-                    result.Correct = true;
+                    //result.Correct = true;
                 }
             }
             catch (Exception ex)
@@ -506,6 +507,58 @@ namespace BL
                 result.ErrorMessage = ex.Message;
                 result.Ex = ex;
             }
+            return result;
+        }
+
+        public static ML.Result GetAll(ML.Usuario usuario)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using(DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities context = new DL_EF.JGuevaraProgramacioNCapasFebrero2026Entities())
+                {
+                    var query = context.UsuarioGetAll(usuario.Nombre, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Rol.IdRol).ToList();
+
+                    if(query.Count > 0)
+                    {
+                        result.Objects = new List<object>();
+
+                        foreach(var item in query)
+                        {
+                            ML.Usuario usuarioBD = new ML.Usuario();
+                            usuarioBD.IdUsuario = item.IdUsuario;
+                            usuarioBD.Nombre = item.UsuarioNombre;
+                            usuarioBD.ApellidoPaterno = item.ApellidoPaterno;
+                            usuarioBD.ApellidoMaterno = item.ApellidoMaterno;
+                            usuarioBD.Imagen = new byte[0];
+
+                            usuarioBD.Estatus = item.Estatus;
+
+
+                            usuarioBD.Rol = new ML.Rol();
+                            usuarioBD.Rol.Nombre = item.RolNombre;
+
+                            usuarioBD.Direccion = new ML.Direccion();
+                            usuarioBD.Direccion.Colonia = new ML.Colonia();
+
+                            result.Objects.Add(usuarioBD);
+                        }
+
+                        result.Correct = true; 
+                    } else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No hay usuarios";
+                    }
+                }
+
+            } catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
             return result;
         }
     }

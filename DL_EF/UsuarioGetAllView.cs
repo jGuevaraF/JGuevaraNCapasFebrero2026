@@ -10,8 +10,9 @@
 namespace DL_EF
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class UsuarioGetAll_Result
+    public partial class UsuarioGetAllView
     {
         public int IdUsuario { get; set; }
         public string UsuarioNombre { get; set; }

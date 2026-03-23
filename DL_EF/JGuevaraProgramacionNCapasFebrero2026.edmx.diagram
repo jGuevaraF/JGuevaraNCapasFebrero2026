@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="528ab4b6465d443ab28fb811ff982920" Name="Diagram1">
+      <Diagram DiagramId="528ab4b6465d443ab28fb811ff982920" Name="Diagram1" ZoomLevel="124">
         <EntityTypeShape EntityType="JGuevaraProgramacioNCapasFebrero2026Model.Rol" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="JGuevaraProgramacioNCapasFebrero2026Model.Colonia" Width="1.5" PointX="5.25" PointY="5.125" />
         <EntityTypeShape EntityType="JGuevaraProgramacioNCapasFebrero2026Model.Direccion" Width="1.5" PointX="7.5" PointY="2.875" />
@@ -16,6 +16,7 @@
         <EntityTypeShape EntityType="JGuevaraProgramacioNCapasFebrero2026Model.Usuario" Width="1.5" PointX="3" PointY="0.875" />
         <AssociationConnector Association="JGuevaraProgramacioNCapasFebrero2026Model.FK__Direccion__IdUsu__3F466844" />
         <AssociationConnector Association="JGuevaraProgramacioNCapasFebrero2026Model.FK__Usuario__IdRol__145C0A3F" />
+        <EntityTypeShape EntityType="JGuevaraProgramacioNCapasFebrero2026Model.UsuarioGetAllView" Width="1.5" PointX="7.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
