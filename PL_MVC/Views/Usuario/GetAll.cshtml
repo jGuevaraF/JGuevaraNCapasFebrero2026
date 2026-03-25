@@ -6,25 +6,45 @@
 }
 
 
-@using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post))
-{
-    @Html.LabelFor(model => model.BusquedaAbierta.Nombre)
-    @Html.TextBoxFor(model => model.BusquedaAbierta.Nombre)
+@*@using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post))
+    {
+        @Html.LabelFor(model => model.BusquedaAbierta.Nombre)
+        @Html.TextBoxFor(model => model.BusquedaAbierta.Nombre)
 
-    @Html.LabelFor(model => model.BusquedaAbierta.ApellidoPaterno)
-    @Html.TextBoxFor(model => model.BusquedaAbierta.ApellidoPaterno)
+        @Html.LabelFor(model => model.BusquedaAbierta.ApellidoPaterno)
+        @Html.TextBoxFor(model => model.BusquedaAbierta.ApellidoPaterno)
 
-    @Html.LabelFor(model => model.BusquedaAbierta.ApellidoMaterno)
-    @Html.TextBoxFor(model => model.BusquedaAbierta.ApellidoMaterno)
+        @Html.LabelFor(model => model.BusquedaAbierta.ApellidoMaterno)
+        @Html.TextBoxFor(model => model.BusquedaAbierta.ApellidoMaterno)
 
-    @Html.DropDownListFor(model => model.BusquedaAbierta.IdRol, new SelectList(Model.Rol.Roles, "IdRol", "Nombre"), "Selecciona un Rol")
+        @Html.DropDownListFor(model => model.BusquedaAbierta.IdRol, new SelectList(Model.Rol.Roles, "IdRol", "Nombre"), "Selecciona un Rol")
 
-    <button type="submit">Buscar usuario</button>
-}
+        <button type="submit">Buscar usuario</button>
+    }*@
 
 @Html.ActionLink("Agregar", "Form", "Usuario", new { @class = "btn btn-success", @id = "Boton" })
 
+@using (Html.BeginForm("CargaMasiva", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label>Carga Masiva</label>
+    <input type="file" name="archivoTxt" />
+    <button type="submit" class="btn btn-primary">Carga masiva</button>
+}
 
+@if (Session["UsuariosCarga"] != null)
+{
+    var lista = (List<object>)Session["UsuariosCarga"];
+
+    foreach (var item in lista)
+    {
+        var usuario = (ML.Usuario)item;
+        <tr>
+            <td>@usuario.Nombre</td>
+            <td>@usuario.ApellidoPaterno</td>
+            <td>@usuario.ApellidoMaterno</td>
+        </tr>
+    }
+}
 
 @if (Model.Usuarios.Count > 0)
 {
@@ -140,7 +160,7 @@ else
 
     //ajax => get/post
     //data o URL => APIS REST
-        //Estatus y IdUsuario
+    //Estatus y IdUsuario
 
 
 </script>

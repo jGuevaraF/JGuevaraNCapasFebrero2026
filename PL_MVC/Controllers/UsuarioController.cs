@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -17,6 +18,7 @@ namespace PL_MVC.Controllers
         [HttpGet] //Action Verb | Decoradores
         public ActionResult GetAll()
         {
+
 
             ML.Usuario usuario = new ML.Usuario();
             usuario.Nombre = "";
@@ -42,7 +44,6 @@ namespace PL_MVC.Controllers
 
             ML.Result resultRol = BL.Rol.GetAll();
             usuario.Rol.Roles = resultRol.Objects;
-
 
             return View(usuario);
         }
@@ -320,5 +321,54 @@ namespace PL_MVC.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult CargaMasiva(HttpPostedFileBase archivoTxt)
+        {
+            List<object> usuarios = new List<object>();
+            if (archivoTxt != null)
+            {
+                using (var reader = new StreamReader(archivoTxt.InputStream))
+                {
+                    //bool encabezados = true;
+                    string linea;
+
+                    //int numeroLinea = 1;
+                    linea = reader.ReadLine();
+                    while ((linea = reader.ReadLine()) != null)
+                    {
+
+                        //if (encabezados)
+                        //{
+                        //    encabezados = false;
+                        //    numeroLinea++;
+                        //    continue;
+                        //}
+
+                        string[] datos = linea.Split('|');
+
+                        if (!Regex.IsMatch(datos[1], "[a-zA-Z]"))
+                        {
+                            throw new Exception("Verica el nombre");
+                        }
+
+                        if (!Regex.IsMatch(datos[2], "[a-z]"))
+                        {
+                            throw new Exception("solo letras minusculas");
+                        }
+
+                        ML.Usuario usuario = new ML.Usuario();
+                        usuario.Nombre = datos[1];
+                        usuario.ApellidoPaterno = datos[2];
+                        usuario.ApellidoMaterno = datos[3];
+
+
+                        usuarios.Add(usuario);
+                    }
+                }
+            }
+            Session["UsuariosCarga"] = usuarios;
+            return RedirectToAction("GetAll");
+        }
+
     }
 }
