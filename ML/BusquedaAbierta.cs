@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 
 namespace ML
 {
-    public class Rol
+    public class BusquedaAbierta
     {
-        [Required]
-        public int IdRol { get; set; }
+        [RegularExpression("")]
         public string Nombre { get; set; }
+        [RegularExpression("")]
+        public string ApellidoPaterno { get; set; }
+
+        [RegularExpression("")]
+        public string ApellidoMaterno { get; set; }
+
+        public int IdRol { get; set; }
 
         public List<object> Roles { get; set; }
     }

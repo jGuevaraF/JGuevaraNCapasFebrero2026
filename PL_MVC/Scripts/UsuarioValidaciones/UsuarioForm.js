@@ -2,7 +2,7 @@
     let res = /^[a-zA-Z]+$/.test(event.key);
 
     let padreDiv = $(input).closest('div');
-    let span = $(padreDiv[0]).children('span')
+    let span = $(padreDiv[0]).children('p')
     console.log(padreDiv)
     console.log(span)
     if (res) {

@@ -48,33 +48,48 @@ namespace PL_MVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetAll(ML.Usuario usuario)
+        public ActionResult GetAll(ML.Usuario usuarioBuscar)
         {
-            //if (usuario.Nombre == null)
-            //{
-            //    usuario.Nombre = "";
-            //}
-
-            usuario.Nombre = usuario.Nombre == null ? "" : usuario.Nombre;
-
-            //if(usuario.ApellidoPaterno == null)
-            //{
-            //    usuario.ApellidoPaterno = ""; ??
-            //}
-
-            usuario.ApellidoPaterno = usuario.ApellidoPaterno == null ? "" : usuario.ApellidoPaterno;
-
-            if(usuario.ApellidoMaterno == null)
+            ML.Usuario usuario = new ML.Usuario();
+            if (ModelState.IsValid)
             {
-                usuario.ApellidoMaterno = "";
+                //validos correctos
+                //if (usuario.Nombre == null)
+                //{
+                //    usuario.Nombre = "";
+                //}
+
+                usuarioBuscar.Nombre = usuarioBuscar.BusquedaAbierta.Nombre == null ? "" : usuarioBuscar.Nombre;
+
+                //if(usuario.ApellidoPaterno == null)
+                //{
+                //    usuario.ApellidoPaterno = ""; ??
+                //}
+
+                usuarioBuscar.ApellidoPaterno = usuario.ApellidoPaterno == null ? "" : usuario.ApellidoPaterno;
+
+                if (usuarioBuscar.ApellidoMaterno == null)
+                {
+                    usuarioBuscar.ApellidoMaterno = "";
+                }
+
+
+                ML.Result result = BL.Usuario.GetAll(usuario);
+                usuario.Usuarios = result.Objects;
+
+
             }
-            ML.Result result = BL.Usuario.GetAll(usuario);
-            usuario.Usuarios = result.Objects;
+            else
+            {
+                usuario.Usuarios = new List<object>();
+
+            }
 
             ML.Result resultRol = BL.Rol.GetAll();
             usuario.Rol.Roles = resultRol.Objects;
 
             return View(usuario);
+
         }
 
         //FileResult => descarga un archivo
@@ -166,54 +181,107 @@ namespace PL_MVC.Controllers
         [HttpPost]
         public ActionResult Form(ML.Usuario usuario, HttpPostedFileBase UsuarioImagen)
         {
-            //HttpPostedFileBase imagen = Request.Files["UsuarioImagen"];
 
-            if (UsuarioImagen != null)
+            if (ModelState.IsValid)
             {
-                //convertir httpPostedFileBase => byte[]
-                // Source - https://stackoverflow.com/a/7852256
-                // Posted by Jon Skeet
-                // Retrieved 2026-03-13, License - CC BY-SA 3.0
+                //HttpPostedFileBase imagen = Request.Files["UsuarioImagen"];
 
-                byte[] data;
-                using (Stream inputStream = UsuarioImagen.InputStream)
+                if (UsuarioImagen != null)
                 {
-                    MemoryStream memoryStream = inputStream as MemoryStream;
-                    if (memoryStream == null)
+                    //convertir httpPostedFileBase => byte[]
+                    // Source - https://stackoverflow.com/a/7852256
+                    // Posted by Jon Skeet
+                    // Retrieved 2026-03-13, License - CC BY-SA 3.0
+
+                    byte[] data;
+                    using (Stream inputStream = UsuarioImagen.InputStream)
                     {
-                        memoryStream = new MemoryStream();
-                        inputStream.CopyTo(memoryStream);
+                        MemoryStream memoryStream = inputStream as MemoryStream;
+                        if (memoryStream == null)
+                        {
+                            memoryStream = new MemoryStream();
+                            inputStream.CopyTo(memoryStream);
+                        }
+
+                        usuario.Imagen = memoryStream.ToArray();
                     }
 
-                    usuario.Imagen = memoryStream.ToArray();
                 }
 
-            }
-
-            if (usuario.IdUsuario == 0)
-            {
-                //add
-
-                ML.Result result = BL.Usuario.Add(usuario);
-                //ML.Result result = new ML.Result();
-                //result.Correct = true;
-
-                if (result.Correct)
+                if (usuario.IdUsuario == 0)
                 {
+                    //add
+
+                    ML.Result result = BL.Usuario.Add(usuario);
+                    //ML.Result result = new ML.Result();
+                    //result.Correct = true;
+
+                    if (result.Correct)
+                    {
+                        return RedirectToAction("GetAll");
+                        //BL.Usuario.GetAll();
+                        //return View("GetAll", result);
+                    }
+                }
+                else
+                {
+                    //update
+                    BL.Usuario.UpdateEF(usuario);
                     return RedirectToAction("GetAll");
-                    //BL.Usuario.GetAll();
-                    //return View("GetAll", result);
                 }
             }
             else
             {
-                //update
-                BL.Usuario.UpdateEF(usuario);
-                return RedirectToAction("GetAll");
+                ML.Result resultRol = BL.Rol.GetAll();
+                usuario.Rol.Roles = resultRol.Objects;
+
+                ML.Result resultEstado = BL.Estado.GetAll();
+                usuario.Direccion.Colonia.Municipio.Estado.Estados = resultEstado.Objects;
+
+                if (usuario.Direccion.Colonia.Municipio.Estado.IdEstado > 0)
+                {
+                    ML.Result resultMunicipio = BL.Municipio.GetByIdEstado(usuario.Direccion.Colonia.Municipio.Estado.IdEstado);
+
+                    if (resultMunicipio.Correct)
+                    {
+                        usuario.Direccion.Colonia.Municipio.Municipios = resultMunicipio.Objects;
+                    }
+                    else
+                    {
+                        usuario.Direccion.Colonia.Municipio.Municipios = new List<object>();
+                    }
+                }
+                else
+                {
+                    usuario.Direccion.Colonia.Municipio.Municipios = new List<object>();
+
+                }
+
+                if (usuario.Direccion.Colonia.Municipio.IdMunicipio > 0)
+                {
+                    ML.Result resultColonia = BL.Colonia.GetByIdMunicipio(usuario.Direccion.Colonia.Municipio.IdMunicipio);
+
+                    if (resultColonia.Correct)
+                    {
+                        usuario.Direccion.Colonia.Colonias = resultColonia.Objects;
+                    }
+                    else
+                    {
+                        usuario.Direccion.Colonia.Colonias = new List<object>();
+                    }
+                }
+                else
+                {
+                    usuario.Direccion.Colonia.Colonias = new List<object>();
+
+                }
+
+                return View(usuario);
             }
 
-
             return View(usuario);
+
+
         }
 
         [HttpGet]

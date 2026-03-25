@@ -21,21 +21,24 @@
                         @Html.LabelFor(model => model.Nombre)
                         @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @onkeypress = "SoloLetras(this, event)" })
 
-                        <span></span>
+                        <p></p>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new {@style="Color:red;"})
                         @*<input id="Nombre" name="Nombre" type="text" value="">*@
                     </div>
                     <div class="col-4">
                         <div>
                             @Html.LabelFor(model => model.ApellidoPaterno)
                             @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @onkeypress = "SoloLetras(this, event)" })
-                            <span></span>
+                            <p></p>
+                            @Html.ValidationMessageFor(model => model.ApellidoPaterno)
+
                         </div>
 
                         <div>
 
                             @Html.LabelFor(model => model.ApellidoMaterno)
                             @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control", @onkeypress = "SoloLetras(this, event)" })
-                            <span></span>
+                            <p></p>
                         </div>
 
                     </div>

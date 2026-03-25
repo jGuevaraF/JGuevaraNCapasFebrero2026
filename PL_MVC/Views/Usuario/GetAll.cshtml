@@ -8,16 +8,16 @@
 
 @using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post))
 {
-    @Html.LabelFor(model => model.Nombre)
-    @Html.TextBoxFor(model => model.Nombre)
+    @Html.LabelFor(model => model.BusquedaAbierta.Nombre)
+    @Html.TextBoxFor(model => model.BusquedaAbierta.Nombre)
 
-    @Html.LabelFor(model => model.ApellidoPaterno)
-    @Html.TextBoxFor(model => model.ApellidoPaterno)
+    @Html.LabelFor(model => model.BusquedaAbierta.ApellidoPaterno)
+    @Html.TextBoxFor(model => model.BusquedaAbierta.ApellidoPaterno)
 
-    @Html.LabelFor(model => model.ApellidoMaterno)
-    @Html.TextBoxFor(model => model.ApellidoMaterno)
+    @Html.LabelFor(model => model.BusquedaAbierta.ApellidoMaterno)
+    @Html.TextBoxFor(model => model.BusquedaAbierta.ApellidoMaterno)
 
-    @Html.DropDownListFor(model => model.Rol.IdRol, new SelectList(Model.Rol.Roles, "IdRol", "Nombre"), "Selecciona un Rol")
+    @Html.DropDownListFor(model => model.BusquedaAbierta.IdRol, new SelectList(Model.Rol.Roles, "IdRol", "Nombre"), "Selecciona un Rol")
 
     <button type="submit">Buscar usuario</button>
 }
