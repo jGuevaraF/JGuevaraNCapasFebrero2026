@@ -39,11 +39,17 @@ namespace PL_MVC.Controllers
             else
             {
                 ViewBag.ErrorMessage = result.ErrorMessage;
-
             }
 
             ML.Result resultRol = BL.Rol.GetAll();
             usuario.Rol.Roles = resultRol.Objects;
+
+            if (Session["UsuariosCarga"] != null)
+            {
+                ML.Usuario cargaMasiva = Session["UsuariosCarga"] as ML.Usuario;
+                usuario.Correctos = cargaMasiva.Correctos;
+                usuario.Incorrectos = cargaMasiva.Incorrectos;
+            }
 
             return View(usuario);
         }
@@ -324,50 +330,93 @@ namespace PL_MVC.Controllers
 
         public ActionResult CargaMasiva(HttpPostedFileBase archivoTxt)
         {
-            List<object> usuarios = new List<object>();
+            //ext archivo .txt .xlx
+            ML.Usuario usuarioVista = new ML.Usuario();
+            usuarioVista.Correctos = new List<object>();
+            usuarioVista.Incorrectos = new List<object>();
+
             if (archivoTxt != null)
             {
                 using (var reader = new StreamReader(archivoTxt.InputStream))
                 {
-                    //bool encabezados = true;
+                    bool encabezados = true;
                     string linea;
 
-                    //int numeroLinea = 1;
-                    linea = reader.ReadLine();
+                    int numeroLinea = 1;
+                    //linea = reader.ReadLine();
                     while ((linea = reader.ReadLine()) != null)
                     {
 
-                        //if (encabezados)
-                        //{
-                        //    encabezados = false;
-                        //    numeroLinea++;
-                        //    continue;
-                        //}
+                        if (encabezados)
+                        {
+                            encabezados = false;
+                            numeroLinea++;
+                            continue;
+                        }
 
                         string[] datos = linea.Split('|');
 
-                        if (!Regex.IsMatch(datos[1], "[a-zA-Z]"))
+                        string validacion = ValidarDatos(datos, numeroLinea);
+
+                        if (validacion == "Todo bien")
                         {
-                            throw new Exception("Verica el nombre");
-                        }
 
-                        if (!Regex.IsMatch(datos[2], "[a-z]"))
+                            ML.Usuario usuario = new ML.Usuario();
+                            usuario.Nombre = datos[1];
+                            usuario.ApellidoPaterno = datos[2];
+                            usuario.ApellidoMaterno = datos[3];
+
+                            usuarioVista.Correctos.Add(usuario);
+                        }
+                        else
                         {
-                            throw new Exception("solo letras minusculas");
+                            usuarioVista.Incorrectos.Add($"Linea {numeroLinea}: {validacion}");
                         }
-
-                        ML.Usuario usuario = new ML.Usuario();
-                        usuario.Nombre = datos[1];
-                        usuario.ApellidoPaterno = datos[2];
-                        usuario.ApellidoMaterno = datos[3];
-
-
-                        usuarios.Add(usuario);
+                        numeroLinea++;
                     }
                 }
+                Session["UsuariosCarga"] = usuarioVista;
             }
-            Session["UsuariosCarga"] = usuarios;
+            else
+            {
+                if (Session["UsuariosCarga"] != null)
+                {
+                    ML.Usuario cargaMasiva = Session["UsuariosCarga"] as ML.Usuario;
+                    if (cargaMasiva != null && cargaMasiva.Incorrectos.Count == 0)
+                    {
+                        foreach (ML.Usuario usuario in cargaMasiva.Correctos)
+                        {
+                            BL.Usuario.Add(usuario);
+                        }
+                    }
+                }
+                Session["UsuariosCarga"] = null;
+            }
             return RedirectToAction("GetAll");
+        }
+
+
+        public string ValidarDatos(string[] datos, int numeroLinea)
+        {
+            try
+            {
+                //if (datos.Length < 6)
+                //{
+                //    throw new Exception("faltan datos");
+                //}
+
+                if (!Regex.IsMatch(datos[1], "[a-zA-Z]"))
+                {
+                    throw new Exception("Verica el nombre");
+                }
+
+
+                return "Todo bien";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
     }

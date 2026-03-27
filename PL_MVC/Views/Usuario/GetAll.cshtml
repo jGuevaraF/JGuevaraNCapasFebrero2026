@@ -28,14 +28,21 @@
 {
     <label>Carga Masiva</label>
     <input type="file" name="archivoTxt" />
-    <button type="submit" class="btn btn-primary">Carga masiva</button>
+
+    if (Model.Incorrectos != null && Model.Incorrectos.Count == 0)
+    {
+        <button type="submit" class="btn btn-success">Guardar Datos</button>
+    }
+    else
+    {
+        <button type="submit" class="btn btn-primary">Validar Datos</button>
+    }
+
 }
 
-@if (Session["UsuariosCarga"] != null)
+@if (Model.Correctos != null && Model.Correctos.Count > 0)
 {
-    var lista = (List<object>)Session["UsuariosCarga"];
-
-    foreach (var item in lista)
+    foreach (var item in Model.Correctos)
     {
         var usuario = (ML.Usuario)item;
         <tr>
@@ -45,6 +52,32 @@
         </tr>
     }
 }
+
+@if (Model.Incorrectos != null && Model.Incorrectos.Count > 0)
+{
+    foreach (var item in Model.Incorrectos)
+    {
+        var error = item.ToString();
+        <li>
+            @error
+        </li>
+    }
+}
+
+@*@if (Session["UsuariosCarga"] != null)
+    {
+        var lista = (List<object>)Session["UsuariosCarga"];
+
+        foreach (var item in lista)
+        {
+            var usuario = (ML.Usuario)item;
+            <tr>
+                <td>@usuario.Nombre</td>
+                <td>@usuario.ApellidoPaterno</td>
+                <td>@usuario.ApellidoMaterno</td>
+            </tr>
+        }
+    }*@
 
 @if (Model.Usuarios.Count > 0)
 {

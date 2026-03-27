@@ -40,5 +40,10 @@ namespace ML
 
 
         public ML.BusquedaAbierta BusquedaAbierta { get; set; }
+
+
+        //manejo de los errores
+        public List<object> Correctos { get; set; }
+        public List<object> Incorrectos { get; set; }
     }
 }
